@@ -24,7 +24,7 @@ struct Args {
     // when converting bytes to values, how endian'ness to use
     #[arg(long, default_value_t = Endian::Little, value_enum)]
     endian: Endian,
-    
+
     // start byte
     #[arg(long, default_value_t = 0, value_parser = value_parser!(u8).range(0..=7))]
     start_byte: u8,
@@ -82,20 +82,18 @@ impl CanFrame {
         end_byte: u8,
         end_mask: u8,
         factor: f64,
-        offset: f64
+        offset: f64,
     ) -> String {
-        let id: String;
-
-        if self.id <= 0x7FF {
-            id = format!("     {:03X}", self.id);
+        let id = if self.id <= 0x7FF {
+            format!("     {:03X}", self.id)
         } else {
-            id = format!("{:08X}", self.id);
-        }
+            format!("{:08X}", self.id)
+        };
 
         let mut data: String = String::with_capacity(32);
         let mut value_bytes: Vec<u8> = Vec::new();
         let data_len: u8 = std::cmp::min(self.data.len() as u8 - 1, end_byte);
-    
+
         for i in start_byte..=data_len {
             let mut byte = self.data[i as usize];
             if i == start_byte {
@@ -114,7 +112,7 @@ impl CanFrame {
         let uvalue: u64;
         let svalue: i64;
 
-        for _ in 0..(7-(data_len-start_byte)) {
+        for _ in 0..(7 - (data_len - start_byte)) {
             match endian {
                 Endian::Little => value_bytes.push(0x00),
                 Endian::Big => value_bytes.insert(0, 0x00),
@@ -125,16 +123,21 @@ impl CanFrame {
             Endian::Little => {
                 uvalue = u64::from_le_bytes(value_bytes.clone().try_into().unwrap());
                 svalue = i64::from_le_bytes(value_bytes.clone().try_into().unwrap());
-            },
+            }
             Endian::Big => {
                 uvalue = u64::from_be_bytes(value_bytes.clone().try_into().unwrap());
                 svalue = i64::from_be_bytes(value_bytes.clone().try_into().unwrap());
-            },
+            }
         }
 
         format!(
             "{:.6} | {} | {} | {} | {:.6} | {:.6}",
-            self.timestamp, self.device, id, data, (uvalue as f64 * factor) + offset, (svalue as f64 * factor) + offset
+            self.timestamp,
+            self.device,
+            id,
+            data,
+            (uvalue as f64 * factor) + offset,
+            (svalue as f64 * factor) + offset
         )
     }
 }
