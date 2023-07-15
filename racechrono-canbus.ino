@@ -56,8 +56,10 @@ void setup()
     // set logging level
     logger::get().set_level(log_level::info);
 
-    delay(500);
-    infoln("setup() on core %d", xPortGetCoreID());
+    delay(1500);
+    Serial.print("starting up on core ");
+    Serial.println(xPortGetCoreID());
+    Serial.flush();
 
     //
     // All Bluetooth LE related activity is pinned to core 0
