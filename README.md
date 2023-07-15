@@ -9,6 +9,10 @@ even death.
 By using any information, hardware designs or code in this project you assume any and all risk, and release any
 liability from the author(s) and contributors to this project.
 
+## Debugging
+
+Turn on debugging messages by uncommenting out `#define DEBUG` in `src/racechrono-canbus.hpp`.
+
 ## Outline
 
 ESP32 CAN-bus device for [RaceChrono](https://racechrono.com) on iOS/Android.

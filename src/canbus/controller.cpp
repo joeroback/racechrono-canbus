@@ -63,7 +63,6 @@ controller::controller() noexcept
     , _queue_storage{}
     , _static_queue{}
 {
-    portMUX_INITIALIZE(&_lock);
 }
 
 controller& controller::get() noexcept
@@ -104,6 +103,7 @@ bool controller::install() noexcept
 
     ENTER_CRITICAL();
 
+    verboseln("CAN bus creating frame queue...");
     _queue = xQueueCreateStatic(_queue_length, _queue_item_size, _queue_storage, &_static_queue);
     verboseln("CAN bus frame queue created...");
 
@@ -115,6 +115,7 @@ bool controller::install() noexcept
     twai_ll_enter_reset_mode(dev);
     if (!twai_ll_is_in_reset_mode(dev))
     {
+        EXIT_CRITICAL();
         return false;
     }
 #if SOC_TWAI_SUPPORT_MULTI_ADDRESS_LAYOUT

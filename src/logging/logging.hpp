@@ -76,9 +76,9 @@ public:
         if (level <= _log_level)
         {
             char buf[128];
-            snprintf(buf, sizeof(buf), fmt, std::forward<TArgs>(args)...);
+            size_t len = snprintf(buf, sizeof(buf), fmt, std::forward<TArgs>(args)...);
             portENTER_CRITICAL(&_lock);
-            Serial.print(buf);
+            Serial.write(buf, len);
             Serial.flush();  // when writing to Serial on different cores, flush() seems required
             portEXIT_CRITICAL(&_lock);
         }
@@ -93,9 +93,9 @@ public:
         if (level <= _log_level)
         {
             char buf[128];
-            snprintf(buf, sizeof(buf), fmt, std::forward<TArgs>(args)...);
+            size_t len = snprintf(buf, sizeof(buf), fmt, std::forward<TArgs>(args)...);
             portENTER_CRITICAL(&_lock);
-            Serial.print(buf);
+            Serial.write(buf, len);
             Serial.println();
             Serial.flush();  // when writing to Serial on different cores, flush() seems required
             portEXIT_CRITICAL(&_lock);

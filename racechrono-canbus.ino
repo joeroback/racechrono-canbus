@@ -33,7 +33,7 @@ using namespace logging;
 namespace
 {
 
-constexpr uint32_t core0_stack_size = 8 * 1024;
+constexpr uint32_t core0_stack_size = 6 * 1024;
 StaticTask_t core0_buffer;
 StackType_t core0_stack[core0_stack_size];
 TaskHandle_t core0_handle;
@@ -54,10 +54,10 @@ void setup()
 #endif
 
     // set logging level
-    logger::get().set_level(log_level::warn);
+    logger::get().set_level(log_level::info);
 
-    infoln("Starting...");
     delay(500);
+    infoln("setup() on core %d", xPortGetCoreID());
 
     //
     // All Bluetooth LE related activity is pinned to core 0

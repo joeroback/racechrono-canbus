@@ -52,6 +52,13 @@
     if (RCUNLIKELY(!(_expr))) { abort(); }    \
 } while (0)
 
+// Adafruit ESP32 Feather (Huzzah32)
+#if defined(ARDUINO_FEATHER_ESP32)
+#define CAN_RX_PIN GPIO_NUM_26
+#define CAN_TX_PIN GPIO_NUM_25
+#define BLE_PWR_LVL ESP_PWR_LVL_P9
+#endif
+
 // Adafruit Feather S3
 #if defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S3)
 #define CAN_RX_PIN GPIO_NUM_18
