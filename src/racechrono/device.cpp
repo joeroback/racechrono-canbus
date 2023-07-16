@@ -37,7 +37,7 @@ device& device::get() noexcept
 
 bool device::start(BLECharacteristicCallbacks* callbacks) noexcept
 {
-    infoln("Bluetooth LE starting...");
+    bootln("Bluetooth LE starting...");
 
     char name[32];
 
@@ -46,13 +46,13 @@ bool device::start(BLECharacteristicCallbacks* callbacks) noexcept
 
     if (ret == ESP_OK)
     {
-        infoln("Bluetooth LE MAC: %02x:%02x:%02x:%02x:%02x:%02x",
+        bootln("Bluetooth LE MAC: %02x:%02x:%02x:%02x:%02x:%02x",
             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
         snprintf(name, sizeof(name), "RaceChrono %02X:%02X:%02X", mac[3], mac[4], mac[5]);
     }
     else
     {
-        errorln("ERROR: Unable to determine bluetooth MAC address! reason: %d", ret);
+        bootln("ERROR: Unable to determine bluetooth MAC address! reason: %d", ret);
         snprintf(name, sizeof(name), "RaceChrono DIY");
     }
 
@@ -75,7 +75,7 @@ bool device::start(BLECharacteristicCallbacks* callbacks) noexcept
     advertising->setScanResponse(false);
     BLEDevice::startAdvertising();
 
-    infoln("Bluetooth LE started!");
+    bootln("Bluetooth LE started!");
 
     return true;
 }

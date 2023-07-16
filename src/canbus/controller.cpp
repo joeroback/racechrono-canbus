@@ -99,18 +99,18 @@ void controller::stats() noexcept
 
 bool controller::install() noexcept
 {
-    infoln("CAN bus starting...");
+    bootln("CAN bus starting...");
 
     ENTER_CRITICAL();
 
-    verboseln("CAN bus creating frame queue...");
+    bootln("CAN bus creating frame queue...");
     _queue = xQueueCreateStatic(_queue_length, _queue_item_size, _queue_storage, &_static_queue);
-    verboseln("CAN bus frame queue created...");
+    bootln("CAN bus frame queue created...");
 
     // enable APB CLK to TWAI peripheral
     periph_module_reset(PERIPH_TWAI_MODULE);
     periph_module_enable(PERIPH_TWAI_MODULE);
-    verboseln("CAN bus peripheral enabled...");
+    bootln("CAN bus peripheral enabled...");
 
     twai_ll_enter_reset_mode(dev);
     if (!twai_ll_is_in_reset_mode(dev))
@@ -127,7 +127,7 @@ bool controller::install() noexcept
     twai_ll_set_tec(dev, 0);
     twai_ll_set_err_warn_lim(dev, 96);
 
-    verboseln("CAN bus mode reset...");
+    bootln("CAN bus mode reset...");
 
     // configure bus timing, acceptance filter, CLKOUT, and interrupts
     // get timing and filter from car specific decoder
@@ -145,23 +145,23 @@ bool controller::install() noexcept
 
     EXIT_CRITICAL();
 
-    verboseln("CAN bus timings reset...");
-    verboseln("          BRP: %3u", t_config.brp);
-    verboseln("          SJW: %3u", t_config.sjw);
-    verboseln("        TSEG1: %3u", t_config.tseg_1);
-    verboseln("        TSEG2: %3u", t_config.tseg_2);
-    verboseln("  3x Sampling: %3s", t_config.triple_sampling == 0 ? "No" : "Yes");
+    bootln("CAN bus timings reset...");
+    bootln("          BRP: %3u", t_config.brp);
+    bootln("          SJW: %3u", t_config.sjw);
+    bootln("        TSEG1: %3u", t_config.tseg_1);
+    bootln("        TSEG2: %3u", t_config.tseg_2);
+    bootln("  3x Sampling: %3s", t_config.triple_sampling == 0 ? "No" : "Yes");
 
     // only setup RX pin, we aren't transmitting any CAN messages on bus
     gpio_set_pull_mode(CAN_RX_PIN, GPIO_FLOATING);
     esp_rom_gpio_connect_in_signal(CAN_RX_PIN, TWAI_RX_IDX, false);
     esp_rom_gpio_pad_select_gpio(CAN_RX_PIN);
     gpio_set_direction(CAN_RX_PIN, GPIO_MODE_INPUT);
-    verboseln("CAN bus GPIO pins reset...");
+    bootln("CAN bus GPIO pins reset...");
 
     // setup interrupt service routine
     esp_intr_alloc(ETS_TWAI_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1, isr, this, &_isr_handle);
-    verboseln("CAN bus interrupt handler installed...");
+    bootln("CAN bus interrupt handler installed...");
 
     return true;
 }
@@ -186,7 +186,7 @@ bool controller::start() noexcept
 
     EXIT_CRITICAL();
 
-    infoln("CAN bus started!");
+    bootln("CAN bus started!");
 
     return true;
 }

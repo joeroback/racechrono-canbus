@@ -21,9 +21,6 @@
 // SOFTWARE.
 #pragma once
 
-// no assertions
-#define NDEBUG
-
 #include <Arduino.h>
 
 #include <cstdint>

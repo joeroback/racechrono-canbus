@@ -31,7 +31,7 @@ logger& logger::get() noexcept
 }
 
 logger::logger() noexcept
-    : _log_level(log_level::off)
+    : _log_level(log_level::boot)
     , _lock(portMUX_INITIALIZER_UNLOCKED)
 {
 }

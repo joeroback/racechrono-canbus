@@ -37,6 +37,7 @@ namespace logging
 enum class log_level
 {
     off,
+    boot,
     error,
     warn,
     info,
@@ -111,6 +112,18 @@ private:
 };
 
 } // namespace logging
+
+template <typename ...TArgs>
+void boot(const char* fmt, TArgs&& ...args) noexcept
+{
+    logging::logger::get().log(logging::log_level::boot, fmt, std::forward<TArgs>(args)...);
+}
+
+template <typename ...TArgs>
+void bootln(const char* fmt, TArgs&& ...args) noexcept
+{
+    logging::logger::get().logln(logging::log_level::boot, fmt, std::forward<TArgs>(args)...);
+}
 
 template <typename ...TArgs>
 void error(const char* fmt, TArgs&& ...args) noexcept
