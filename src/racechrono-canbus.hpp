@@ -21,6 +21,9 @@
 // SOFTWARE.
 #pragma once
 
+// no assertions
+#define NDEBUG
+
 #include <Arduino.h>
 
 #include <cstdint>
@@ -38,7 +41,7 @@
 /// statistics timeout in microseconds
 #define CONFIG_RC_STATS_TIMEOUT 5000000
 
-/// define to enable debugging code
+/// if DEBUG is defined, logger will be enabled and print to serial console
 // #define DEBUG
 
 /// _x branch is likely to be true

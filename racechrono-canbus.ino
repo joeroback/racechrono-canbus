@@ -49,6 +49,11 @@ void setup()
 
     Serial.begin(115200);
 
+    delay(1500);
+    Serial.print("Starting up on core ");
+    Serial.println(xPortGetCoreID());
+    Serial.flush();
+
 #if defined(DEBUG)
     delay(5000);
 #endif
@@ -56,15 +61,13 @@ void setup()
     // set logging level
     logger::get().set_level(log_level::info);
 
-    delay(1500);
-    Serial.print("starting up on core ");
-    Serial.println(xPortGetCoreID());
-    Serial.flush();
+    //
+    // ATTENTION:
+    //   All Bluetooth LE related activity must be pinned to core 0
+    //   All CAN-bus related activity must be pinned to core 1
+    //
 
-    //
-    // All Bluetooth LE related activity is pinned to core 0
-    // All CAN-bus related activity is pinned to core 1
-    //
+    assert(xPortGetCoreID() == 1);
 
     core0_handle = xTaskCreateStaticPinnedToCore(
         core0,
@@ -81,24 +84,23 @@ void setup()
     // wait for core 0 to start (not strictly necessary)
     while (!core0_started) { delay(100); }
 
-    // TODO retry failed start
-
     // setup can-bus on core 1 (default), interrupt handler will be serviced on core 1
     if (CANCTLR.install())
     {
         if (CANCTLR.start())
         {
-            infoln("CAN bus started!");
             LED.builtin_on();
         }
         else
         {
             errorln("ERROR: CAN bus controller startup failed!");
+            esp_restart();
         }
     }
     else
     {
         errorln("ERROR: CAN bus driver install failed!");
+        esp_restart();
     }
 }
 
@@ -114,7 +116,6 @@ void core0(void*)
     // start up bluetooth le connection
     if (RCDEV.start(&CANDEC))
     {
-        infoln("RaceChrono Bluetooth LE started!");
         core0_started = true;
 
         while (true)
@@ -133,8 +134,8 @@ void core0(void*)
     }
     else
     {
-        // TODO retry failed start
         errorln("ERROR: RaceChrono bluetooth device startup failed!");
+        esp_restart();
     }
 
     // should never reach here...

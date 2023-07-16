@@ -37,9 +37,26 @@ device& device::get() noexcept
 
 bool device::start(BLECharacteristicCallbacks* callbacks) noexcept
 {
-    infoln("RaceChrono BLE starting...");
+    infoln("Bluetooth LE starting...");
 
-    BLEDevice::init("RaceChrono DIY");
+    char name[32];
+
+    uint8_t mac[6];
+    esp_err_t ret = esp_read_mac(mac, ESP_MAC_BT);
+
+    if (ret == ESP_OK)
+    {
+        infoln("Bluetooth LE MAC: %02x:%02x:%02x:%02x:%02x:%02x",
+            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+        snprintf(name, sizeof(name), "RaceChrono %02X:%02X:%02X", mac[3], mac[4], mac[5]);
+    }
+    else
+    {
+        errorln("ERROR: Unable to determine bluetooth MAC address! reason: %d", ret);
+        snprintf(name, sizeof(name), "RaceChrono DIY");
+    }
+
+    BLEDevice::init(name);
     BLEDevice::setPower(BLE_PWR_LVL);
 
     _server = BLEDevice::createServer();
@@ -58,19 +75,21 @@ bool device::start(BLECharacteristicCallbacks* callbacks) noexcept
     advertising->setScanResponse(false);
     BLEDevice::startAdvertising();
 
+    infoln("Bluetooth LE started!");
+
     return true;
 }
 
 void device::onConnect(BLEServer*)
 {
-    infoln("RaceChrono BLE client connected!");
+    infoln("Bluetooth LE client connected!");
     _client_connected = true;
 }
 
 void device::onDisconnect(BLEServer*)
 {
     // once connection is made, BLE stops advertising, so on disconnect, start advertising again..
-    infoln("RaceChrono BLE client disconnected!");
+    infoln("Bluetooth LE client disconnected!");
     _client_connected = false;
     BLEDevice::startAdvertising();
 }

@@ -99,7 +99,7 @@ void controller::stats() noexcept
 
 bool controller::install() noexcept
 {
-    infoln("CAN bus installing driver...");
+    infoln("CAN bus starting...");
 
     ENTER_CRITICAL();
 
@@ -121,7 +121,7 @@ bool controller::install() noexcept
 #if SOC_TWAI_SUPPORT_MULTI_ADDRESS_LAYOUT
     twai_ll_enable_extended_reg_layout(dev);
 #endif
-    twai_ll_set_mode(dev, TWAI_MODE_LISTEN_ONLY);    //Freeze REC by changing to LOM mode
+    twai_ll_set_mode(dev, TWAI_MODE_LISTEN_ONLY);    // freeze REC by changing to LOM mode
     // reset RX and TX error counters
     twai_ll_set_rec(dev, 0);
     twai_ll_set_tec(dev, 0);
@@ -141,7 +141,7 @@ bool controller::install() noexcept
     // disable tx interrupts, as we are listen-only
     // disable data overrun and wakeup interrupts (both have issues on ESP32)
     twai_ll_set_enabled_intrs(dev, 0xA7); //0xE7);
-    (void) twai_ll_get_and_clear_intrs(dev);    //Clear any latched interrupts
+    (void) twai_ll_get_and_clear_intrs(dev);    // clear any latched interrupts
 
     EXIT_CRITICAL();
 
@@ -180,11 +180,13 @@ bool controller::start() noexcept
 
     xQueueReset(_queue);
 
-    (void) twai_ll_get_and_clear_intrs(dev);    //Clear any latched interrupts
+    (void) twai_ll_get_and_clear_intrs(dev);    // clear any latched interrupts
     _running = true;
     twai_ll_exit_reset_mode(dev);
 
     EXIT_CRITICAL();
+
+    infoln("CAN bus started!");
 
     return true;
 }
