@@ -33,13 +33,14 @@
 #include <freertos/semphr.h>
 
 /// define to build the decoder for the BMW g8x
-#define CONFIG_CANBUS_DECODER_BMWG8X 1
+// #define CONFIG_CANBUS_DECODER_BMWG8X 1
+#define CONFIG_CANBUS_DECODER_PORSCHE992 1
 
 /// statistics timeout in microseconds
 #define CONFIG_RC_STATS_TIMEOUT 5000000
 
 /// if DEBUG is defined, logger will be enabled and print to serial console
-// #define DEBUG
+#define DEBUG
 
 /// _x branch is likely to be true
 #define RCLIKELY(_x)    __builtin_expect(!!(_x), 1)
