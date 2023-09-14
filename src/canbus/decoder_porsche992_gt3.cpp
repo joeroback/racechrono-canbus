@@ -47,6 +47,11 @@ public:
     {
     }
 
+    const char* name() const noexcept override
+    {
+        return "Porsche 992 Decoder";
+    }
+
     twai_timing_config_t timing() const noexcept override
     {
         return TWAI_TIMING_CONFIG_500KBITS();

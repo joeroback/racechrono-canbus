@@ -110,6 +110,8 @@ namespace
 // core 0 - receive can frames from queue, send over bluetooth le
 void core0(void*)
 {
+    bootln("Starting %s", CANDEC.name());
+
     // xQueue copies all data, so we can use a static buffer here
     static canbus::frame f;
 

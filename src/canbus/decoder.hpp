@@ -90,6 +90,11 @@ public:
     virtual ~decoder() noexcept;
 
     /**
+     * return the name of this decoder (for logging purposes)
+     */
+    virtual const char* name() const noexcept = 0;
+
+    /**
      * override this in sub-class for a given vehicle CAN-bus timing.
      * @see https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/twai.html#bit-timing
      */
