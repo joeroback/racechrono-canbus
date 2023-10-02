@@ -66,24 +66,35 @@ public:
     {
         switch (pid)
         {
-            case 0x1F1:
-                return 1;
             default:
                 return rate_default;
         }
     }
 
+    // decode all PIDs for now
+    bool can_decode(uint32_t id) const noexcept override
+    {
+        return true;
+    }
+
+    // decode all PIDs for now
+    bool should_decode(uint32_t id) noexcept override
+    {
+        return true;
+    }
+
 private:
     explicit decoder_porsche992() noexcept
-        : decoder(3)
+        : decoder(1)
     {
         // pre-sorted list of pids
         // list must be sorted by ID, as binary search is used
         // easy enough to pre-sort this list here
         size_t idx = 0;
-        _ids[idx++] = { 0x1F1, rate_disabled, 0 };
-        _ids[idx++] = { 0x1F2, rate_disabled, 0 };
-        _ids[idx++] = { 0x1F3, rate_disabled, 0 };
+        _ids[idx++] = { 0x0, rate_disabled, 0 };
+
+        // bounds check on ids
+        RCASSERT(idx == _size);
 
         // make sure pids are in sorted order
         uint32_t id = 0;

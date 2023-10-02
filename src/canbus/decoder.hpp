@@ -110,14 +110,14 @@ public:
     /**
      * @return true is \p id can be decoded
      */
-    bool can_decode(uint32_t id) const noexcept;
+    virtual bool can_decode(uint32_t id) const noexcept;
 
     /**
      * should an \p id be decoded? the decoder must know how to decode the id
      * and the rate limit must be triggered as well.
      * @return true is \p id should be decoded
      */
-    bool should_decode(uint32_t id) noexcept;
+    virtual bool should_decode(uint32_t id) noexcept;
 
 protected:
     explicit decoder(size_t size) noexcept;
