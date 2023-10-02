@@ -82,11 +82,14 @@ public:
             // RPM - 100hz
             case 0x0A5:
                 return 3;
-            // THROTTLE (%) - 100hz
+            // THROTTLE (%) / ACCELERATOR PEDAL (%) - 100hz
             case 0x0D9:
                 return 3;
             // BRAKE PRESSURE - 50hz
             case 0x0EF:
+                return 2;
+            // ABS / ASC
+            case 0x173:
                 return 2;
             // LONGITUDINAL ACCELERATION - 50hz
             case 0x199:
@@ -100,16 +103,25 @@ public:
             // SPEED - 50hz
             case 0x1A1:
                 return 2;
+            // BATTERY VOLTAGE
+            case 0x281:
+                return 1;
+            // Fuel
+            case 0x2C4:
+                return 1;
             // AIR_TEMP - 1hz
             case 0x2CA:
                 return 1;
             // STEERING ANGLE - 5hz
             case 0x301:
                 return 1;
+            // Fuel Used, Fuel Indicator Lamp, Fuel Range
+            case 0x330:
+                return 1;
             // STEERING ANGLE - 25hz (301 vs 302 both contain angle like units, 301 is steering on F-series)
             // case 0x302:
             //     return 1;
-            // GEAR, WATER_TEMP, OIL_TEMP - 1hz
+            // GEAR, WATER_TEMP, OIL_TEMP, Max RPM - 1hz
             // gear changes trigger immediate update
             case 0x3F9:
                 return 1;
@@ -120,7 +132,7 @@ public:
 
 private:
     explicit decoder_bmwg8x() noexcept
-        : decoder(10)
+        : decoder(14)
     {
         // pre-sorted list of pids
         // list must be sorted by ID, as binary search is used
@@ -129,12 +141,16 @@ private:
         _ids[idx++] = { 0x0A5, rate_disabled, 0 }; // RPM
         _ids[idx++] = { 0x0D9, rate_disabled, 0 }; // THROTTLE
         _ids[idx++] = { 0x0EF, rate_disabled, 0 }; // BRAKE PRESSURE
+        _ids[idx++] = { 0x173, rate_disabled, 0 }; // ABS / ASC
         _ids[idx++] = { 0x199, rate_disabled, 0 }; // LONGITUDINAL ACCELERATION
         _ids[idx++] = { 0x19A, rate_disabled, 0 }; // LATERAL ACCELERATION
         _ids[idx++] = { 0x19F, rate_disabled, 0 }; // YAW RATE
         _ids[idx++] = { 0x1A1, rate_disabled, 0 }; // SPEED
+        _ids[idx++] = { 0x281, rate_disabled, 0 }; // BATTERY VOLTAGE
+        _ids[idx++] = { 0x2C4, rate_disabled, 0 }; // FUEL RAW
         _ids[idx++] = { 0x2CA, rate_disabled, 0 }; // AIR_TEMP
         _ids[idx++] = { 0x301, rate_disabled, 0 }; // STEERING ANGLE
+        _ids[idx++] = { 0x330, rate_disabled, 0 }; // FUEL USED, FUEL LAMP, FUEL RANGE
         _ids[idx++] = { 0x3F9, rate_disabled, 0 }; // GEAR, OIL_TEMP, WATER_TEMP (alternative)
 
         // make sure pids are in sorted order
