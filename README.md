@@ -36,3 +36,4 @@ ESP32 CAN-bus device for [RaceChrono](https://racechrono.com) on iOS/Android.
 * https://github.com/aollin/racechrono-ble-diy-device
 * https://github.com/timurrrr/RaceChronoDiyBleDevice
 * https://github.com/espressif/arduino-esp32
+* https://thesecretingredient.neocities.org/bmw/can/g29/

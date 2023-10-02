@@ -1,8 +1,10 @@
 # Vehicles Supported
 
-## BMW G8X (G80/G81/G82/G83) M3/M4
+## BMW F/G Series
 
 Making the physical connection to the PT (Power Train) CAN-bus on a BMW G8x series vehicle is not too difficult.
+The CAN seems to be the same on all F and G series BMWs, as well as J series Toyotas, using the BMW engines.
+
 It requires...
 
 * [Posi-tap Connectors, 20-22 Gauge Wire](https://smile.amazon.com/dp/B004D0C2RC)
