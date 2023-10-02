@@ -49,10 +49,11 @@ void setup()
 
     Serial.begin(115200);
 
-    delay(1500);
+    delay(3500);
     Serial.print("Starting up on core ");
     Serial.println(xPortGetCoreID());
     Serial.flush();
+    delay(4500);
 
 #if defined(DEBUG)
     delay(5000);

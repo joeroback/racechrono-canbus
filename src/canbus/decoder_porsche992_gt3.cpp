@@ -91,7 +91,7 @@ private:
         // list must be sorted by ID, as binary search is used
         // easy enough to pre-sort this list here
         size_t idx = 0;
-        _ids[idx++] = { 0x0, rate_disabled, 0 };
+        _ids[idx++] = { 0x1, rate_disabled, 0 };
 
         // bounds check on ids
         RCASSERT(idx == _size);
